@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.contrib.auth.models import User
+from datetime import datetime
 
 from django.db import models
 
@@ -20,3 +21,33 @@ class Aulas(models.Model):
 
     def __str__(self) -> str:
         return self.nome
+
+
+
+class Comentarios(models.Model):
+    usuario = models.ForeignKey(User, on_delete = models.DO_NOTHING)
+    comentario = models.TextField()
+    data = models.DateTimeField(default = datetime.now)
+    aula = models.ForeignKey(Aulas, on_delete = models.DO_NOTHING)
+    
+    def __str__(self) -> str:
+        return self.usuario.username
+    
+
+
+class NotasAulas(models.Model):
+    choices = (
+        ('p', 'Péssimo'),
+        ('r', 'Ruim'),
+        ('re', 'Regular'),
+        ('b', 'bom'),
+        ('o', 'Ótimo')
+    )
+
+    aula = models.ForeignKey(Aulas, on_delete=models.DO_NOTHING)
+    nota = models.CharField(max_length=50, choices=choices)
+    usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+
+
+
